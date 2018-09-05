@@ -1,16 +1,23 @@
-require_relative './wheel'
+require_relative './rotor'
 
 class Enigma
-  attr_accessor :wheel_one, :wheel_two, :wheel_three
-
   def initialize
-    @wheel_one = Wheel.new
-    @wheel_two = Wheel.new(@wheel_one)
-    @wheel_three = Wheel.new(@wheel_two)
+    @event_handler = EventHandler.new
+    rotor_one = Rotor.new(event_hander: event_handler)
+    rotor_two = Rotor.new(event_hander: event_handler)
+    rotor_three = Rotor.new(event_hander: event_handler)
+
+    @event_handler.rotors = [rotor_one, rotor_two, rotor_three]
   end
 
-  def increment!
-    @wheel_three.increment!
-    self
+  def set_positions(one, two, three)
+  end
+
+  def input(character)
+    @event_handler.input(character)
+  end
+
+  def reflect(character)
+    @event_handler.reflect(character)
   end
 end
