@@ -6,39 +6,24 @@ class EventHandler
     @one, @two, @three = *rotors
   end
 
-  def increment!
-    @three.position += 1
-
-    if @three.position == 26
-      @three.position = 0
-      @two.position += 1
-    end
-
-    if @two.position == 26
-      @three.position = 0
-      @two.position = 0
-      @one.position += 1
-    end
-
-    if @one.position == 26
-      @one.position = 0
-      @two.position = 0
-      @three.position = 0
+  def rollover!(rotor)
+    case rotor
+      when @one
+        [@one, @two, @three].map(&:reset)
+      when @two
+        @one.increment
+      when @three
+        @two.increment
     end
   end
 
-  def input(character)
-    character_position = ("a".."z").to_a.index(character)
-
-    val = @one.input(@two.input(@three.input(character_position)))
-    increment!
-    ("a".."z").to_a[val]
+  def input(position)
+    @one.input(@two.input(@three.input(position))).tap do |val|
+      @three.increment
+    end
   end
 
-  def reflector(character)
-    character_position = ("a".."z").to_a.index(character)
-
-    val = @three.reflect(@two.reflect(@one.reflect(character_position)))
-    ("a".."z").to_a[val]
+  def reflect(position)
+    @three.reflect(@two.reflect(@one.reflect(position)))
   end
 end

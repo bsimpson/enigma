@@ -6,35 +6,38 @@ class Rotor
   def initialize(event_handler:, position: 0)
     self.position = position
     self.event_handler = event_handler
+    mapping
   end
 
-  def input(character)
-    mapping[character]
+  def input(index)
+    mapping[index]
   end
 
-  def reflect(character)
-    mapping.key(character)
+  def reflect(value)
+    mapping.index(value)
   end
 
   def to_s
     { position: position }
   end
 
-  def mapping
-    @mapping ||= begin
-      remaining = (0..25).to_a
-      pairs = {}
-
-      while remaining.length > 0
-        input, output = remaining.sample(2)
-        pairs[input] = output
-        pairs[output] = input
-
-        remaining.delete(input)
-        remaining.delete(output)
-      end
-
-      pairs
+  def increment
+    @mapping.push(@mapping.shift)
+    @position += 1
+    if (@position > 25)
+      event_handler.rollover!(self)
+      reset
     end
+  end
+
+  def reset
+    @position.times do
+      @mapping.unshift(@mapping.pop)
+    end
+    @position = 0
+  end
+
+  def mapping
+    @mapping ||= (0..25).to_a.sample(26)
   end
 end
