@@ -1,12 +1,11 @@
 require "./event_handler"
 
 class Rotor
-  attr_accessor :position, :event_handler
+  attr_accessor :position, :event_handler, :mapping
 
   def initialize(event_handler:, position: 0)
-    self.position = position
-    self.event_handler = event_handler
-    mapping
+    @position = position
+    @event_handler = event_handler
   end
 
   def input(index)
@@ -37,7 +36,7 @@ class Rotor
     @position = 0
   end
 
-  def mapping
-    @mapping ||= (0..25).to_a.sample(26)
+  def position=(position)
+    position.times { increment }
   end
 end

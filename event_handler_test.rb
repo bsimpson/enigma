@@ -6,8 +6,11 @@ describe EventHandler do
   before do
     @event_handler = EventHandler.new
     @rotor_one = Rotor.new(event_handler: @event_handler)
+    @rotor_one.mapping = (0..26).to_a
     @rotor_two = Rotor.new(event_handler: @event_handler)
+    @rotor_two.mapping = (0..26).to_a
     @rotor_three = Rotor.new(event_handler: @event_handler)
+    @rotor_three.mapping = (0..26).to_a
     @event_handler.rotors = [@rotor_one, @rotor_two, @rotor_three]
   end
 

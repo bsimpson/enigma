@@ -7,6 +7,7 @@ describe Rotor do
     event_handler.expect :increment!, nil
 
     @rotor = Rotor.new(event_handler: event_handler)
+    @rotor.mapping = (0..25).to_a.sample(26)
   end
 
   it "starts at zero" do
@@ -60,5 +61,18 @@ describe Rotor do
 
     @rotor.position.must_equal 0
     @rotor.mapping[0].must_equal first_map
+  end
+
+  it "sets mapping" do
+    @rotor.mapping = (0..25).to_a.reverse
+    @rotor.mapping.first.must_equal 25
+    @rotor.mapping.last.must_equal 0
+  end
+
+  it "sets position" do
+    @rotor.mapping = (0..25).to_a
+    @rotor.position = 5
+    @rotor.position.must_equal 5
+    @rotor.mapping[0].must_equal 5
   end
 end

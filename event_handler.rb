@@ -24,6 +24,8 @@ class EventHandler
   end
 
   def reflect(position)
-    @three.reflect(@two.reflect(@one.reflect(position)))
+    @three.reflect(@two.reflect(@one.reflect(position))).tap do |val|
+      @three.increment
+    end
   end
 end
