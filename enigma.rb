@@ -26,9 +26,11 @@ class Enigma
   end
 
   def set_positions(one=0, two=0, three=0)
-    three.times { @rotor_three.increment }
-    two.times { @rotor_two.increment }
-    one.times { @rotor_one.increment }
+    [@rotor_three, @rotor_two, @rotor_one].map(&:reset)
+
+    @rotor_three.position = three
+    @rotor_two.position = two
+    @rotor_one.position = one
   end
 
   def input(message)

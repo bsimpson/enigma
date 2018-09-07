@@ -33,6 +33,16 @@ describe Enigma do
     @enigma.reflect("fljtzgwmawsekamov").must_equal "ichbineinberliner"
   end
 
+  it "enrypts with rollover" do
+    @enigma.set_rotors(Enigma::RotorMapping::IIC, Enigma::RotorMapping::IC, Enigma::RotorMapping::IIIC)
+    @enigma.set_positions(1, 5, 22)
+    plaintext = "thisisatestoftheemergencybroadcastsystem"
+    encrypted_value = @enigma.input(plaintext)
+
+    @enigma.set_positions(1, 5, 22)
+    @enigma.reflect(encrypted_value).must_equal(plaintext)
+  end
+
   it "converts char to code" do
     @enigma.char_code("a").must_equal 0 
     @enigma.char_code("z").must_equal 25
