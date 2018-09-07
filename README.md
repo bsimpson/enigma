@@ -111,9 +111,12 @@ Now you are ready to encrypt a message:
   enigma.input("ichbineinberliner") #=> "fljtzgwmawsekamov"
 ```
 
-### Decrypt a Message
+### Decrypt a Message (Reflector)
+
+Observe that you need to reset the rotor positions to have the same values as the encrypted message:
 
 ```ruby
+ engima.set_positions(1, 5, 3)
  enigma.reflect("fljtzgwmawsekamov") #=> "ichbineinberliner"
 ```
 
