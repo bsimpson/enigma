@@ -1,14 +1,9 @@
 require_relative './rotor'
 require_relative './event_handler'
+require 'ostruct'
 
 class Enigma
   attr_accessor :event_handler
-
-  module RotorMapping
-    IC =   [3, 12, 19, 22, 18, 8, 11, 17, 20, 24, 16, 13, 10, 5, 4, 9, 2, 0, 25, 1, 15, 6, 23, 14, 7, 21].freeze
-    IIC =  [7, 16, 25, 6, 15, 9, 19, 12, 14, 1, 11, 13, 2, 8, 5, 3, 24, 0, 22, 21, 4, 20, 18, 17, 10, 23].freeze
-    IIIC = [20, 16, 13, 19, 11, 18, 25, 5, 12, 17, 4, 7, 3, 15, 23, 10, 8, 1, 21, 24, 6, 9, 2, 22, 14, 0].freeze
-  end
 
   def initialize
     @event_handler = EventHandler.new
@@ -19,7 +14,7 @@ class Enigma
     @event_handler.rotors = [@rotor_one, @rotor_two, @rotor_three]
   end
 
-  def set_rotors(one=RotorMapping::IC, two=RotorMapping::IIC, three=RotorMapping::IIIC)
+  def set_rotors(one=RotorMapping::IC.mapping, two=RotorMapping::IIC.mapping, three=RotorMapping::IIIC.mapping)
     @rotor_one.mapping = one.dup
     @rotor_two.mapping = two.dup
     @rotor_three.mapping = three.dup
@@ -56,5 +51,45 @@ class Enigma
 
   def code_char(idx)
     ("a".."z").to_a[idx]
+  end
+
+  module RotorMapping
+    def self.char_code(char)
+      ::Enigma.new.char_code(char)
+    end
+
+    IC, IIC, IIIC, RocketI, RocketII, RocketIII, RocketUKW, RocketETW, IK, IIK, IIIK, UKWK, ETWK, I, II, III, IV, V, VI,
+    VII, VIII, Beta, Gamma, ReflectorA, ReflectorB, ReflectorC, ReflectorBThin, ReflectorCThin, ETW = 
+    *[
+      { mapping: "DMTWSILRUYQNKFEJCAZBPGXOHV", date: "1924"            , name: "Commercial Enigma A, B" }  ,
+      { mapping: "HQZGPJTMOBLNCIFDYAWVEUSRKX", date: "1924"            , name: "Commercial Enigma A, B" }  ,
+      { mapping: "UQNTLSZFMREHDPXKIBVYGJCWOA", date: "1924"            , name: "Commercial Enigma A, B" }  ,
+      { mapping: "JGDQOXUSCAMIFRVTPNEWKBLZYH", date: "7 February 1941" , name: "German Railway (Rocket)" } ,
+      { mapping: "NTZPSFBOKMWRCJDIVLAEYUXHGQ", date: "7 February 1941" , name: "German Railway (Rocket)" } ,
+      { mapping: "JVIUBHTCDYAKEQZPOSGXNRMWFL", date: "7 February 1941" , name: "German Railway (Rocket)" } ,
+      { mapping: "QYHOGNECVPUZTFDJAXWMKISRBL", date: "7 February 1941" , name: "German Railway (Rocket)" } ,
+      { mapping: "QWERTZUIOASDFGHJKPYXCVBNML", date: "7 February 1941" , name: "German Railway (Rocket)" } ,
+      { mapping: "PEZUOHXSCVFMTBGLRINQJWAYDK", date: "February 1939"   , name: "Swiss K" }                 ,
+      { mapping: "ZOUESYDKFWPCIQXHMVBLGNJRAT", date: "February 1939"   , name: "Swiss K" }                 ,
+      { mapping: "EHRVXGAOBQUSIMZFLYNWKTPDJC", date: "February 1939"   , name: "Swiss K" }                 ,
+      { mapping: "IMETCGFRAYSQBZXWLHKDVUPOJN", date: "February 1939"   , name: "Swiss K" }                 ,
+      { mapping: "QWERTZUIOASDFGHJKPYXCVBNML", date: "February 1939"   , name: "Swiss K" }                 ,
+      { mapping: "EKMFLGDQVZNTOWYHXUSPAIBRCJ", date: "1930"            , name: "Enigma I" }                ,
+      { mapping: "AJDKSIRUXBLHWTMCQGZNPYFVOE", date: "1930"            , name: "Enigma I" }                ,
+      { mapping: "BDFHJLCPRTXVZNYEIWGAKMUSQO", date: "1930"            , name: "Enigma I" }                ,
+      { mapping: "ESOVPZJAYQUIRHXLNFTGKDCMWB", date: "December 1938"   , name: "M3 Army" }                 ,
+      { mapping: "VZBRGITYUPSDNHLXAWMJQOFECK", date: "December 1938"   , name: "M3 Army" }                 ,
+      { mapping: "JPGVOUMFYQBENHZRDKASXLICTW", date: "1939"            , name: "M3 & M4 Naval (FEB 1942)" },
+      { mapping: "NZJHGRCXMYSWBOUFAIVLPEKQDT", date: "1939"            , name: "M3 & M4 Naval (FEB 1942)" },
+      { mapping: "FKQHTLXOCBJSPDZRAMEWNIUYGV", date: "1939"            , name: "M3 & M4 Naval (FEB 1942)" },
+      { mapping: "LEYJVCNIXWPBQMDRTAKZGFUHOS", date: "Spring 1941"     , name: "M4 R2" }                   ,
+      { mapping: "FSOKANUERHMBTIYCWLQPZXVGJD", date: "Spring 1942"     , name: "M4 R2" }                   ,
+      { mapping: "EJMZALYXVBWFCRQUONTSPIKHGD", date: nil               , name: nil }                       ,
+      { mapping: "YRUHQSLDPXNGOKMIEBFZCWVJAT", date: nil               , name: nil }                       ,
+      { mapping: "FVPJIAOYEDRZXWGCTKUQSBNMHL", date: nil               , name: nil }                       ,
+      { mapping: "ENKQAUYWJICOPBLMDXZVFTHRGS", date: "1940"            , name: "M4 R1 (M3 + Thin)" }       ,
+      { mapping: "RDOBJNTKVEHMLFCWZAXGYIPSUQ", date: "1940"            , name: "M4 R1 (M3 + Thin)" }       ,
+      { mapping: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", date: nil               , name: "Enigma I" }                ,
+    ].map { |rotor| rotor[:mapping].split("").map {|x| char_code(x)}.freeze }
   end
 end

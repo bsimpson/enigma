@@ -1,5 +1,5 @@
 class EventHandler
-  attr_accessor :rotors
+  attr_reader :rotors
 
   def rotors=(rotors)
     @rotors = rotors

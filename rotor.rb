@@ -1,7 +1,8 @@
 require "./event_handler"
 
 class Rotor
-  attr_accessor :position, :event_handler, :mapping
+  attr_accessor :event_handler, :mapping
+  attr_reader :position
 
   def initialize(event_handler:, position: 0)
     @position = position
